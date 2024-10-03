@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"  data-sidebar-behaviour="fixed" data-navigation-color="inverted" data-is-fluid="true">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="Webinning" name="author">
+        
+            <!-- Theme CSS -->
+            <link rel="stylesheet" href="./assets/css/theme.bundle.css" id="stylesheetLTR">
+            <link rel="stylesheet" href="./assets/css/theme.rtl.bundle.css" id="stylesheetRTL">
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+        <link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+        
+        <!-- no-JS fallback -->
+        <noscript>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+        </noscript>
+        
+        <script>
+         // Theme switcher
+        
+            let themeSwitcher = document.getElementById('themeSwitcher');
+        
+            const getPreferredTheme = () => {
+                if (localStorage.getItem('theme') != null) {
+                    return localStorage.getItem('theme');
+                }
+        
+                return document.documentElement.dataset.theme;
+            };
+        
+            const setTheme = function (theme) {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                } else {
+                    document.documentElement.dataset.theme = theme;
+                }
+        
+                localStorage.setItem('theme', theme);
+            };
+        
+            const showActiveTheme = theme => {
+                const activeBtn = document.querySelector(`[data-theme-value="${theme}"]`);
+        
+                document.querySelectorAll('[data-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                });
+        
+                activeBtn && activeBtn.classList.add('active');
+        
+             // Set button if demo mode is enabled
+                document.querySelectorAll('[data-theme-control="theme"]').forEach(element => {
+                    if (element.value == theme) {
+                        element.checked = true;
+                    }
+                });
+            };
+        
+            function reloadPage() {
+                window.location = window.location.pathname;
+            }
+        
+        
+            setTheme(getPreferredTheme());
+        
+            if(typeof themeSwitcher != 'undefined') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    if(localStorage.getItem('theme') != null) {
+                        if (localStorage.getItem('theme') == 'auto') {
+                            reloadPage();
+                        }
+                    }
+                });
+        
+                window.addEventListener('load', () => {
+                    showActiveTheme(getPreferredTheme());
+                    
+                    document.querySelectorAll('[data-theme-value]').forEach(element => {
+                        element.addEventListener('click', () => {
+                            const theme = element.getAttribute('data-theme-value');
+        
+                            localStorage.setItem('theme', theme);
+                            reloadPage();
+                        })
+                    })
+                });
+            }
+        </script>
+        <!-- Favicon -->
+        <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any">
+        
+            <!-- Demo script -->
+            <script>
+                var themeConfig = {
+                    theme: JSON.parse('"light"'),
+                    isRTL: JSON.parse('false'),
+                    isFluid: JSON.parse('true'),
+                    sidebarBehaviour: JSON.parse('"fixed"'),
+                    navigationColor: JSON.parse('"inverted"')
+                };
+                
+                var isRTL = localStorage.getItem('isRTL') === 'true',
+                    isFluid = localStorage.getItem('isFluid') === 'true',
+                    theme = localStorage.getItem('theme'),
+                    sidebarSizing = localStorage.getItem('sidebarSizing'),
+                    linkLTR = document.getElementById('stylesheetLTR'),
+                    linkRTL = document.getElementById('stylesheetRTL'),
+                    html = document.documentElement;
+        
+                if (isRTL) {
+                    linkLTR.setAttribute('disabled', '');
+                    linkRTL.removeAttribute('disabled');
+                    html.setAttribute('dir', 'rtl');
+                } else {
+                    linkRTL.setAttribute('disabled', '');
+                    linkLTR.removeAttribute('disabled');
+                    html.removeAttribute('dir');
+                }
+            </script>
+        
+        <!-- Page Title -->
+        <title>홈 | Dashly</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.6/wordcloud2.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <scripts src='https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2'></scripts>
+    </head>
+    
+    <body>
+
+            <!-- THEME CONFIGURATION -->
+            <script>
+                let themeAttrs = document.documentElement.dataset;
+            
+                for(let attr in themeAttrs) {
+                    if(localStorage.getItem(attr) != null) {
+                        document.documentElement.dataset[attr] = localStorage.getItem(attr);
+            
+                        if (theme === 'auto') {
+                            document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            
+                            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                                e.matches ? document.documentElement.dataset.theme = 'dark' : document.documentElement.dataset.theme = 'light';
+                            });
+                        }
+                    }
+                }
+            </script>
+        <!-- NAVIGATION -->
+        <nav
+          id="mainNavbar"
+          class="navbar navbar-vertical navbar-expand-lg scrollbar bg-dark navbar-dark"
+        >
+          <!-- Theme configuration (navbar) -->
+           <script>
+            let navigationColor = localStorage.getItem('navigationColor'),
+                navbar = document.getElementById('mainNavbar');
+        
+            if(navigationColor != null && navbar != null) {
+                if(navigationColor == 'inverted') {
+                    navbar.classList.add('bg-dark', 'navbar-dark');
+                    navbar.classList.remove('bg-white', 'navbar-light');
+                } else {
+                    navbar.classList.add('bg-white', 'navbar-light');
+                    navbar.classList.remove('bg-dark', 'navbar-dark');
+                }
+            }
+        </script> 
+        
+          <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand" href="./index.html">
+              <img
+                src="./assets/images/logo-small.svg"
+                class="navbar-brand-img logo-light logo-small"
+                alt="..."
+                width="19"
+                height="25"
+              />
+              <img
+                src="./assets/images/logo.svg"
+                class="navbar-brand-img logo-light logo-large"
+                alt="..."
+                width="125"
+                height="25"
+              />
+        
+              <img
+                src="./assets/images/logo-dark-small.svg"
+                class="navbar-brand-img logo-dark logo-small"
+                alt="..."
+                width="19"
+                height="25"
+              />
+              <img
+                src="./assets/images/logo-dark.svg"
+                class="navbar-brand-img logo-dark logo-large"
+                alt="..."
+                width="125"
+                height="25"
+              />
+            </a>
+        
+            <!-- Navbar toggler -->
+            <a
+              href="javascript: void(0);"
+              class="navbar-toggler"
+              data-bs-toggle="collapse"
+              data-bs-target="#sidenavCollapse"
+              aria-controls="sidenavCollapse"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </a>
+        
+            <!-- Collapse -->
+            <div class="collapse navbar-collapse" id="sidenavCollapse">
+              <!-- Navigation -->
+              <ul class="navbar-nav mb-lg-7">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    href="./index.html"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      class="nav-link-icon"
+                      height="18"
+                      width="18"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M3.753,13.944v8.25h6v-6a1.5,1.5,0,0,1,1.5-1.5h1.5a1.5,1.5,0,0,1,1.5,1.5v6h6v-8.25"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      />
+                      <path
+                        d="M.753,12.444,10.942,2.255a1.5,1.5,0,0,1,2.122,0L23.253,12.444"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      />
+                    </svg>
+                    <span>홈</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    href="./total-user-count.html"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"
+                      />
+                    </svg>
+                    <span>누적 총 이용자 수</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    href="./chat-frequency.html"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"
+                      />
+                      <path
+                        d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2"
+                      />
+                    </svg>
+                    <span>시간/요일 별 대화 빈도</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    href="./department.html"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M8.5.5a.5.5 0 0 0-1 0v.518A7 7 0 0 0 1.018 7.5H.5a.5.5 0 0 0 0 1h.518A7 7 0 0 0 7.5 14.982v.518a.5.5 0 0 0 1 0v-.518A7 7 0 0 0 14.982 8.5h.518a.5.5 0 0 0 0-1h-.518A7 7 0 0 0 8.5 1.018zm-6.48 7A6 6 0 0 1 7.5 2.02v.48a.5.5 0 0 0 1 0v-.48a6 6 0 0 1 5.48 5.48h-.48a.5.5 0 0 0 0 1h.48a6 6 0 0 1-5.48 5.48v-.48a.5.5 0 0 0-1 0v.48A6 6 0 0 1 2.02 8.5h.48a.5.5 0 0 0 0-1zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"
+                      />
+                    </svg>
+                    <span>관심 직무 및 부서</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    href="./keyword.html"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M14 5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM2 4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"
+                      />
+                      <path
+                        d="M13 10.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm0-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-5 0A.25.25 0 0 1 8.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 8 8.75zm2 0a.25.25 0 0 1 .25-.25h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5a.25.25 0 0 1-.25-.25zm1 2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-5-2A.25.25 0 0 1 6.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 6 8.75zm-2 0A.25.25 0 0 1 4.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 4 8.75zm-2 0A.25.25 0 0 1 2.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 2 8.75zm11-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-2 0a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-2 0A.25.25 0 0 1 9.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 9 6.75zm-2 0A.25.25 0 0 1 7.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 7 6.75zm-2 0A.25.25 0 0 1 5.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 5 6.75zm-3 0A.25.25 0 0 1 2.25 6h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5A.25.25 0 0 1 2 6.75zm0 4a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm2 0a.25.25 0 0 1 .25-.25h5.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-5.5a.25.25 0 0 1-.25-.25z"
+                      />
+                    </svg>
+                    <span>주요 키워드</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="./chat-emotion.html"
+                    class="nav-link "
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M7.5 1.018a7 7 0 0 0-4.79 11.566L7.5 7.793zm1 0V7.5h6.482A7 7 0 0 0 8.5 1.018M14.982 8.5H8.207l-4.79 4.79A7 7 0 0 0 14.982 8.5M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8"
+                      />
+                    </svg>
+                    <span>대화 감정분석</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    href="./faq-frequency.html"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1zm1 12h2V2h-2zm-3 0V7H7v7zm-5 0v-3H2v3z"
+                      />
+                    </svg>
+                    <span>문의내용 빈도 수</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    href="./chat-log.html"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      class="nav-link-icon"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M3 0h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm0 8h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"
+                      />
+                    </svg>
+                    <span>대화 내역</span>
+                  </a>
+                </li>
+              </ul>
+              <!-- End of Navigation -->
+            </div>
+            <!-- End of Collapse -->
+          </div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main>
+
+            <!-- HEADER -->
+            <header class="container-fluid d-flex py-6 mb-4">
+              <!-- Search -->
+            
+              <!-- Top buttons -->
+              <div class="d-flex align-items-center ms-auto me-n1 me-lg-n2">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel">
+                <div class="offcanvas-header px-5">
+                    <h3 class="offcanvas-title" id="offcanvasNotificationsLabel">Notifications</h3>
+                    
+                    <div class="d-flex align-items-start">
+                        <div class="dropdown">
+                            <a href="javascript: void(0);" class="dropdown-toggle no-arrow w-20px h-20px me-2 text-body" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="16" width="16"><g><circle cx="3.25" cy="12" r="3.25" style="fill: currentColor"/><circle cx="12" cy="12" r="3.25" style="fill: currentColor"/><circle cx="20.75" cy="12" r="3.25" style="fill: currentColor"/></g></svg>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="javascript: void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2 text-secondary" height="14" width="14"><g><path d="M23.22,2.06a1.49,1.49,0,0,0-2,.59l-8.5,15.43L6.46,11.29a1.5,1.5,0,1,0-2.21,2l7.64,8.34a1.52,1.52,0,0,0,2.42-.29L23.81,4.1A1.5,1.5,0,0,0,23.22,2.06Z" style="fill: currentColor"/><path d="M2.61,14.63a1.5,1.5,0,0,0-2.22,2l4.59,5a1.52,1.52,0,0,0,2.11.09,1.49,1.49,0,0,0,.1-2.12Z" style="fill: currentColor"/><path d="M10.3,13a1.41,1.41,0,0,0,2-.54L16.89,4.1a1.5,1.5,0,1,0-2.62-1.45L9.68,11A1.41,1.41,0,0,0,10.3,13Z" style="fill: currentColor"/></g></svg>
+                                        Mark as all read
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript: void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2 text-secondary" height="14" width="14"><g><path d="M21.5,2.5H2.5a2,2,0,0,0-2,2v3a1,1,0,0,0,1,1h21a1,1,0,0,0,1-1v-3A2,2,0,0,0,21.5,2.5Z" style="fill: currentColor"/><path d="M21.5,10H2.5a1,1,0,0,0-1,1v8.5a2,2,0,0,0,2,2h17a2,2,0,0,0,2-2V11A1,1,0,0,0,21.5,10Zm-6.25,3.5A1.25,1.25,0,0,1,14,14.75H10a1.25,1.25,0,0,1,0-2.5h4A1.25,1.25,0,0,1,15.25,13.5Z" style="fill: currentColor"/></g></svg>
+                                        Archive all
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript: void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2 text-secondary" height="14" width="14"><g><path d="M21,19.5a1,1,0,0,0,0-2A1.5,1.5,0,0,1,19.5,16V11.14a8.65,8.65,0,0,0-.4-2.62l-11,11Z" style="fill: currentColor"/><path d="M14.24,21H9.76a.25.25,0,0,0-.24.22,2.64,2.64,0,0,0,0,.28,2.5,2.5,0,0,0,5,0,2.64,2.64,0,0,0,0-.28A.25.25,0,0,0,14.24,21Z" style="fill: currentColor"/><path d="M1,24a1,1,0,0,0,.71-.28l22-22a1,1,0,0,0,0-1.42,1,1,0,0,0-1.42,0l-5,5A7.31,7.31,0,0,0,13,3.07V1a1,1,0,0,0-2,0V3.07a8,8,0,0,0-6.5,8.07V16A1.5,1.5,0,0,1,3,17.5a1,1,0,0,0,0,2h.09L.29,22.29a1,1,0,0,0,0,1.42A1,1,0,0,0,1,24Z" style="fill: currentColor"/></g></svg>
+                                        Disable notifications
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript: void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2 text-secondary" height="14" width="14"><g><rect x="4.25" y="4.5" width="5.75" height="7.25" rx="1.25" style="fill: currentColor"/><path d="M24,10a3,3,0,0,0-3-3H19V2.5a2,2,0,0,0-2-2H2a2,2,0,0,0-2,2V20a3.5,3.5,0,0,0,3.5,3.5h17A3.5,3.5,0,0,0,24,20ZM3.5,21.5A1.5,1.5,0,0,1,2,20V3a.5.5,0,0,1,.5-.5h14A.5.5,0,0,1,17,3V20a3.51,3.51,0,0,0,.11.87.5.5,0,0,1-.09.44.49.49,0,0,1-.39.19ZM22,20a1.5,1.5,0,0,1-3,0V9.5a.5.5,0,0,1,.5-.5H21a1,1,0,0,1,1,1Z" style="fill: currentColor"/><rect x="12" y="6.05" width="3.5" height="2" rx="0.75" style="fill: currentColor"/><rect x="12" y="10.05" width="3.5" height="2" rx="0.75" style="fill: currentColor"/><rect x="4" y="14.05" width="11.5" height="2" rx="0.75" style="fill: currentColor"/><rect x="4" y="18.05" width="9" height="2" rx="0.75" style="fill: currentColor"/></g></svg>                              
+                                        What's new?
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+            
+                        <!-- Button -->
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                </div>
+            
+                <div class="offcanvas-body p-0">
+                    <div class="list-group list-group-flush">
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-28.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Daniel</h5>
+                                        <small class="text-muted">10 minutes ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">RE: Email pre-population from external source</p>
+                                        <small class="text-secondary">Not sure if we'll need any further instruction on how to utilise the encoded ID in links from the new email broadcast tool.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <span class="avatar-title text-bg-info-soft">M</span>
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Mochahost.com</h5>
+                                        <small class="text-muted">14 minutes ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Customer invoice</p>
+                                        <small class="text-secondary">This is a notice that an invoice has been generated on 05/14/2022.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-26.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Harry</h5>
+                                        <small class="text-muted">32 minutes ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Farewell card</p>
+                                        <small class="text-secondary">Hi everyone, thanks to all who have already signed and contributed to Ellie's leaving card.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-20.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Gavin</h5>
+                                        <small class="text-muted">55 minutes ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Weekly cath up</p>
+                                        <small class="text-secondary">Let's see how your emails performed in the past week.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-24.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Pamela - HR</h5>
+                                        <small class="text-muted">1 hour ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">New starter</p>
+                                        <small class="text-secondary">I wanted to introduce Alan to you all, who starts today in the Operations Team as our new Global Payroll & Benefits Manager.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-13.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">James</h5>
+                                        <small class="text-muted">2 hours ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Looking for newsletter analyst</p>
+                                        <small class="text-secondary">Good morning Brian, I hope you can help with the following. I am looking for somebody who can help us create stronger newsletters.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <span class="avatar-title text-bg-primary-soft">S</span>
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">service.paypal.com</h5>
+                                        <small class="text-muted">3 hours ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">You have a Payout!</p>
+                                        <small class="text-secondary">Please note that it may take a little while for this payment to appear in the Activity section of your account.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <span class="avatar-title text-bg-primary-soft">C</span>
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">CookieYes</h5>
+                                        <small class="text-muted">5 hours ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Welcome to CookieYes!</p>
+                                        <small class="text-secondary">Welcome to CookieYes! Thank you for creating an account with us.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-12.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Andrew</h5>
+                                        <small class="text-muted">6 hours ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Congratulations! - and thank you</p>
+                                        <small class="text-secondary">Thank you so much for continuing to leave no stone unturned in pursuit of new milestones of success.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-11.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Helen</h5>
+                                        <small class="text-muted">9 hours ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Bank Holidays season starts tomorrow</p>
+                                        <small class="text-secondary">Our office will be closed on these days, as it will also be on Friday 6 May.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-09.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Tiffany</h5>
+                                        <small class="text-muted">1 day ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">External meetings and events</p>
+                                        <small class="text-secondary">We have updated our external meeting and events protocol. Please have a look at the office board.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <span class="avatar-title text-bg-danger-soft">II</span>
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Ionos Info</h5>
+                                        <small class="text-muted">2 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Recommend us to earn attractive commissions</p>
+                                        <small class="text-secondary">Happy with your product or service? Sign up for the IONOS Referral Program to recommend us to your business partners, friends or family. We'll reward you with attractive commissions when they place an order.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-12.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Edward</h5>
+                                        <small class="text-muted">3 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Website change request</p>
+                                        <small class="text-secondary">Please add video overlay option to microsite header image</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <span class="avatar-title text-bg-primary">BT</span>
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Bootstrap Themes</h5>
+                                        <small class="text-muted">3 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">[Bootstrap Themes] New order (123456)!</p>
+                                        <small class="text-secondary">You've received the following order from alansmith</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-08.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Greg</h5>
+                                        <small class="text-muted">4 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Greg Smith (Jira) 2</p>
+                                        <small class="text-secondary">[JIRA] (WEB-1022) Add Full Width Video Content Block to microsites</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-07.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Michael</h5>
+                                        <small class="text-muted">5 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">Hard drive limit</p>
+                                        <small class="text-secondary">Your hard drive is close to its storage cap. Once exceeded, you can't add new items or sync changes.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <span class="avatar-title text-bg-info">RC</span>
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Rave Coffee</h5>
+                                        <small class="text-muted">6 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">It's Double Points - ⏰ 24 hours only</p>
+                                        <small class="text-secondary">Login to your Rave account to place your order and you will automatically earn double points on every $ spent.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+            
+                        <a href="javascript: void(0);" class="list-group-item list-group-item-action">
+                            <div class="d-flex">
+                                <div class="avatar avatar-circle avatar-xs me-2">
+                                    <img src="./assets/images/profiles/profile-03.jpeg" alt="..." class="avatar-img" width="30" height="30">
+                                </div>
+                
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">John</h5>
+                                        <small class="text-muted">7 days ago</small>
+                                    </div>
+                
+                                    <div class="d-flex flex-column">
+                                        <p class="mb-1">John Po (Jira)</p>
+                                        <small class="text-secondary">Improving slide arrows and indicators on gift impact, testimonial and victories module</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div> 
+                <!-- Button -->
+                <div
+                  class="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm mx-1 mx-lg-2 w-40px h-40px link-secondary"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.6515 19.4054C20.2043 19.2902 20.5336 18.7117 20.2589 18.2183C19.6533 17.1307 18.6993 16.1749 17.4788 15.4465C15.907 14.5085 13.9812 14 12 14C10.0188 14 8.09292 14.5085 6.52112 15.4465C5.30069 16.1749 4.34666 17.1307 3.74108 18.2183C3.46638 18.7117 3.79562 19.2902 4.34843 19.4054C9.39524 20.4572 14.6047 20.4572 19.6515 19.4054Z"
+                      fill="#222222"
+                    />
+                    <circle cx="12" cy="8" r="5" fill="#222222" />
+                  </svg>
+                </div>
+            
+                <span class="fs-3 fw-bold">기업 계정</span>
+            
+                <!-- Custmization offcanvas -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCustomize" aria-labelledby="offcanvasCustomizeTitle">
+                    <div class="offcanvas-body pt-7 pb-5 position-relative">
+                
+                        <button type="button" class="btn-close position-absolute top-0 end-0 mt-5 me-5" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                
+                        <div class="text-center">
+                            <img src="./assets/images/illustrations/customization-illustration.svg" alt="..." class="img-fluid w-50 mb-5" width="170" height="170">
+                            <h3 class="mb-2" id="offcanvasCustomizeTitle">Make Dashly Your Own</h3>
+                            <p class="mb-0">Set preferences that will be cookied for your live preview demonstration</p>
+                        </div>
+                        
+                        <hr>
+                
+                        <h4 class="mb-0">Color Scheme</h4>
+                        <p class="text-secondary fs-5 mb-4">Overall light or dark presentation.</p>
+                        <div class="btn-group w-100 mb-7" role="group" aria-label="Light/dark switcher">
+                            <input type="radio" class="btn-check" name="theme" id="lightMode" value="light" data-theme-control="theme">
+                            <label class="btn btn-outline-primary px-3 w-100 d-flex align-items-center justify-content-center" for="lightMode">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2" height="18" width="18"><g><path d="M12,4.64A7.36,7.36,0,1,0,19.36,12,7.37,7.37,0,0,0,12,4.64Zm0,12.72A5.36,5.36,0,1,1,17.36,12,5.37,5.37,0,0,1,12,17.36Z" style="fill: currentColor"/><path d="M12,3.47a1,1,0,0,0,1-1V1a1,1,0,0,0-2,0V2.47A1,1,0,0,0,12,3.47Z" style="fill: currentColor"/><path d="M4.55,6a1,1,0,0,0,.71.29A1,1,0,0,0,6,6,1,1,0,0,0,6,4.55l-1-1A1,1,0,0,0,3.51,4.93Z" style="fill: currentColor"/><path d="M2.47,11H1a1,1,0,0,0,0,2H2.47a1,1,0,1,0,0-2Z" style="fill: currentColor"/><path d="M4.55,18l-1,1a1,1,0,0,0,0,1.42,1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29l1-1A1,1,0,0,0,4.55,18Z" style="fill: currentColor"/><path d="M12,20.53a1,1,0,0,0-1,1V23a1,1,0,0,0,2,0V21.53A1,1,0,0,0,12,20.53Z" style="fill: currentColor"/><path d="M19.45,18A1,1,0,0,0,18,19.45l1,1a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.42Z" style="fill: currentColor"/><path d="M23,11H21.53a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z" style="fill: currentColor"/><path d="M18.74,6.26A1,1,0,0,0,19.45,6l1-1a1,1,0,1,0-1.42-1.42l-1,1A1,1,0,0,0,18,6,1,1,0,0,0,18.74,6.26Z" style="fill: currentColor"/></g></svg>
+                                Light
+                            </label>
+                
+                            <input type="radio" class="btn-check" name="theme" id="darkMode" value="dark" data-theme-control="theme">
+                            <label class="btn btn-outline-primary px-3 w-100 d-flex align-items-center justify-content-center" for="darkMode">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2" height="18" width="18"><path d="M19.57,23.34a1,1,0,0,0,0-1.9,9.94,9.94,0,0,1,0-18.88,1,1,0,0,0,.68-.94,1,1,0,0,0-.68-.95A11.58,11.58,0,0,0,8.88,2.18,12.33,12.33,0,0,0,3.75,12a12.31,12.31,0,0,0,5.11,9.79A11.49,11.49,0,0,0,15.61,24,12.55,12.55,0,0,0,19.57,23.34ZM10,20.17A10.29,10.29,0,0,1,5.75,12a10.32,10.32,0,0,1,4.3-8.19A9.34,9.34,0,0,1,15.59,2a.17.17,0,0,1,.17.13.18.18,0,0,1-.07.2,11.94,11.94,0,0,0-.18,19.21.25.25,0,0,1-.16.45A9.5,9.5,0,0,1,10,20.17Z" style="fill: currentColor"/></svg>
+                                Dark
+                            </label>
+                
+                            <input type="radio" class="btn-check" name="theme" id="autoMode" value="auto" data-theme-control="theme">
+                            <label class="btn btn-outline-primary px-3 w-100 d-flex align-items-center justify-content-center" for="autoMode">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2" height="18" width="18"><path d="M24,12a1,1,0,0,0-1-1H19.09a.51.51,0,0,1-.49-.4,6.83,6.83,0,0,0-.94-2.28.5.5,0,0,1,.06-.63l2.77-2.76a1,1,0,1,0-1.42-1.42L16.31,6.28a.5.5,0,0,1-.63.06A6.83,6.83,0,0,0,13.4,5.4a.5.5,0,0,1-.4-.49V1a1,1,0,0,0-2,0V4.91a.51.51,0,0,1-.4.49,6.83,6.83,0,0,0-2.28.94.5.5,0,0,1-.63-.06L4.93,3.51A1,1,0,0,0,3.51,4.93L6.28,7.69a.5.5,0,0,1,.06.63A6.83,6.83,0,0,0,5.4,10.6a.5.5,0,0,1-.49.4H1a1,1,0,0,0,0,2H4.91a.51.51,0,0,1,.49.4,6.83,6.83,0,0,0,.94,2.28.5.5,0,0,1-.06.63L3.51,19.07a1,1,0,1,0,1.42,1.42l2.76-2.77a.5.5,0,0,1,.63-.06,6.83,6.83,0,0,0,2.28.94.5.5,0,0,1,.4.49V23a1,1,0,0,0,2,0V19.09a.51.51,0,0,1,.4-.49,6.83,6.83,0,0,0,2.28-.94.5.5,0,0,1,.63.06l2.76,2.77a1,1,0,1,0,1.42-1.42l-2.77-2.76a.5.5,0,0,1-.06-.63,6.83,6.83,0,0,0,.94-2.28.5.5,0,0,1,.49-.4H23A1,1,0,0,0,24,12Zm-8.74,2.5A5.76,5.76,0,0,1,9.5,8.74a5.66,5.66,0,0,1,.16-1.31A.49.49,0,0,1,10,7.07a5.36,5.36,0,0,1,1.8-.31,5.47,5.47,0,0,1,5.46,5.46,5.36,5.36,0,0,1-.31,1.8.49.49,0,0,1-.35.32A5.53,5.53,0,0,1,15.26,14.5Z" style="fill: currentColor"/></svg>
+                                Auto
+                            </label>
+                        </div>
+                
+                        <h4 class="mb-0">Navigation Color</h4>
+                        <p class="text-secondary fs-5 mb-4">Usually dictated by the color scheme, but can be overriden.</p>
+                        <div class="btn-group w-100 mb-7" role="group" aria-label="Navigation color switcher">
+                            <input type="radio" class="btn-check" name="navigationColor" id="defaultColor" value="default" data-theme-control="navigationColor">
+                            <label class="btn btn-outline-primary w-50" for="defaultColor">
+                                Default
+                            </label>
+                
+                            <input type="radio" class="btn-check" name="navigationColor" id="invertedColor" value="inverted" data-theme-control="navigationColor">
+                            <label class="btn btn-outline-primary w-50" for="invertedColor">
+                                Inverted
+                            </label>
+                        </div>
+                
+                        <h4 class="mb-0">Sidebar behaviour</h4>
+                        <p class="text-secondary fs-5 mb-4">Standard navigation sizing or minified icons with dropdowns.</p>
+                        <div class="btn-group w-100 mb-7" role="group" aria-label="Sidebar layout switcher">
+                            <input type="radio" class="btn-check" name="sidebarSizing" id="fixed" value="fixed" data-theme-control="sidebarBehaviour">
+                            <label class="btn btn-outline-primary px-3 w-100" for="fixed">
+                                Fixed
+                            </label>
+                
+                            <input type="radio" class="btn-check" name="sidebarSizing" id="condensed" value="condensed" data-theme-control="sidebarBehaviour">
+                            <label class="btn btn-outline-primary px-3 w-100" for="condensed">
+                                Condensed
+                            </label>
+                
+                            <input type="radio" class="btn-check" name="sidebarSizing" id="scrollable" value="scrollable" data-theme-control="sidebarBehaviour">
+                            <label class="btn btn-outline-primary px-3 w-100" for="scrollable">
+                                Scrollable
+                            </label>
+                        </div>
+                
+                        <div class="d-flex justify-content-between align-items-center mb-6">
+                            <div class="d-flex flex-column">
+                                <label class="h4 mb-0 d-flex align-items-center" for="isFluid">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2" height="16" width="16"><path d="M4.79,17.21a1,1,0,0,0,.71.29.84.84,0,0,0,.38-.08,1,1,0,0,0,.62-.92v-3a.25.25,0,0,1,.25-.25h10.5a.25.25,0,0,1,.25.25v3a1,1,0,0,0,.62.92.84.84,0,0,0,.38.08,1,1,0,0,0,.71-.29l4.5-4.5a1,1,0,0,0,0-1.42l-4.5-4.5a1,1,0,0,0-1.09-.21,1,1,0,0,0-.62.92v3a.25.25,0,0,1-.25.25H6.75a.25.25,0,0,1-.25-.25v-3a1,1,0,0,0-.62-.92,1,1,0,0,0-1.09.21l-4.5,4.5a1,1,0,0,0,0,1.42Z" style="fill: currentColor"/></svg>                      
+                                    Fluid layout
+                                </label>
+                                <p class="text-secondary fs-5 mb-0">Toggle container layout system</p>
+                            </div>
+                
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" role="switch" data-theme-control="isFluid" id="isFluid" aria-label="Fluid layout switcher" checked>
+                            </div>
+                        </div>
+                
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <div class="d-flex flex-column">
+                                <label class="h4 mb-0 d-flex align-items-center" for="isRTL">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2" height="16" width="16"><g><path d="M4.15,15.85A.47.47,0,0,0,4.5,16a.43.43,0,0,0,.19,0A.5.5,0,0,0,5,15.5V13a.25.25,0,0,1,.25-.25H11.5a1.25,1.25,0,0,0,0-2.5H5.25A.25.25,0,0,1,5,10V7.5A.49.49,0,0,0,4.69,7a.47.47,0,0,0-.54.11l-4,4a.48.48,0,0,0,0,.7Z" style="fill: currentColor"/><rect x="15.5" width="8.5" height="24" rx="2" style="fill: currentColor"/></g></svg>
+                                    RTL Mode
+                                </label>
+                                <p class="text-secondary fs-5 mb-0">Switch your language direction</p>
+                            </div>
+                            
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" role="switch" data-theme-control="isRTL" id="isRTL" aria-label="RTL switcher">
+                            </div>
+                        </div>
+                
+                        <div class="row gx-4 mt-auto">
+                            <div class="col-12">
+                                <hr>
+                            </div>
+                            <div class="col-lg mb-3">
+                                <button class="btn btn-light w-100 d-flex align-items-center justify-content-center" id="resetThemeConfig">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="me-2" height="16" width="16"><path d="M12.57,1.26A10.81,10.81,0,0,0,2.82,8.4a.25.25,0,0,1-.27.16L.86,8.31a.52.52,0,0,0-.49.21.51.51,0,0,0,0,.53L3,13.75a.51.51,0,0,0,.43.25.52.52,0,0,0,.36-.14l3.77-3.75a.5.5,0,0,0-.28-.85L5.59,9a.26.26,0,0,1-.18-.13.24.24,0,0,1,0-.22,8.26,8.26,0,1,1,7.87,11.59,1.25,1.25,0,1,0,.09,2.5,10.75,10.75,0,0,0-.79-21.49Z" style="fill: currentColor"/></svg>                      
+                                    Reset
+                                </button>
+                            </div>
+                            <div class="col-lg mb-3">
+                                <button class="btn btn-dark w-100 d-flex align-items-center justify-content-center" id="previewThemeConfig">
+                                    Preview
+                                </button>
+                            </div>
+                        </div> <!-- / .row -->
+                    </div>
+                </div>
+                <!-- Separator -->
+                <div class="vr bg-gray-700 mx-2 mx-lg-3"></div>
+            
+                <!-- Logout Button -->
+                <button
+                  type="button"
+                  class="btn btn-primary fw-bold"
+                  data-bs-toggle="modal"
+                  data-bs-target="#logoutModal"
+                >
+                  Logout
+                </button>
+              </div>
+            
+              <!-- 로그아웃 모달 -->
+              <div
+                class="modal fade"
+                id="logoutModal"
+                tabindex="-1"
+                aria-labelledby="logoutModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content w-400px mx-auto">
+                    <div class="modal-body text-center display-6 py-6">
+                      로그아웃 하시겠습니까?
+                    </div>
+                    <div class="modal-footer p-3 pt-0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        아니오
+                      </button>
+                      <a href="./login.html"
+                        ><button type="button" class="btn btn-primary">예</button></a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            <div class="container-fluid d-flex flex-column flex-lg-grow-1">
+
+                <div class="d-flex align-items-baseline justify-content-between">
+                
+                    <!-- Title -->
+                    <h1 class="h1">
+                        홈
+                    </h1>
+                </div>
+
+                <div class="row flex-lg-grow-1">
+                    <div class="card">
+                        <div class="d-flex w-100 justify-content-center py-4">
+                            <h2 class="h2 m-0">빈도 상위 Top 5</h2>
+                        </div>
+
+                        <div class="d-flex w-100">
+                            <div class="d-flex w-50 justify-content-center">
+                                <h3 class='h3 m-0'><a href="./department.html" class='text-dark hover-underline'>직무 및 부서</a></h3>
+                            </div>
+                            <div class="d-flex w-50 justify-content-center">
+                                <h3 class='h3 m-0'><a href="./faq-frequency.html" class='text-dark hover-underline'>문의 내용</a></h3>
+                            </div>
+                        </div>
+
+                        <div class="card-body d-flex pt-0">
+                            <!-- Bar Chart1 -->
+                            <div class="chart-container h-400px mb-auto col-6">
+                                <canvas id="barChart1"></canvas>
+                            </div>
+
+                            <!-- Bar Chart2 -->
+                            <div class="chart-container h-400px mb-auto col-6">
+                                <canvas id="barChart2"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="d-flex border border-primary rounded shadow">
+                            <table class="table align-middle m-0" style='table-layout: fixed;'>
+                                <thead class='border-bottom border-primary'>
+                                    <tr>
+                                        <th class='text-center border-end border-primary'><a href="./chat-emotion.html"><span class='h3 m-0 text-dark hover-underline'>챗봇 유저 감정 분석</span></a></th>
+                                        <th class='text-center border-end border-primary'><a href="/keyword.html"><span class='h3 m-0 text-dark hover-underline'>대화 주요 키워드</span></a></th>
+                                        <th class='text-center'><a href="/chat-frequency.html"><span class='h3 m-0 text-dark hover-underline'>시간/요일 별 챗봇 대화 빈도</span></a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class='border-end border-primary border-bottom-0'>
+                                            <div class="chart-container h-300px mb-auto">
+                                                <canvas id="indexPieChart"></canvas>
+                                            </div>
+                                        </td>
+                                        <td class='border-end border-primary border-bottom-0'>
+                                            <div class="chart-container h-300px mb-auto">
+                                                <div id="wordcloud" style='width: 100%; height: 100%;'></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="chart-container h-300px mb-auto">
+                                                <div id="indexHeatmapChart" style='width: 100%; height: 100%;'></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        </div>
+                    </div>
+
+                    
+
+
+                </div> <!-- / .row -->
+            </div> <!-- / .container-fluid -->
+            
+        </main> <!-- / main -->
+
+        <!-- JAVASCRIPT-->
+        <!-- Theme JS -->
+        <script src="./assets/js/theme.bundle.js"></script>    </body>
+</html>

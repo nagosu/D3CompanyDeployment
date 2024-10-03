@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" >
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="Webinning" name="author">
+        
+            <!-- Theme CSS -->
+            <link rel="stylesheet" href="./assets/css/theme.bundle.css" id="stylesheetLTR">
+            <link rel="stylesheet" href="./assets/css/theme.rtl.bundle.css" id="stylesheetRTL">
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+        <link rel="stylesheet" media="print" onload="this.onload=null;this.removeAttribute('media');" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+        
+        <!-- no-JS fallback -->
+        <noscript>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+        </noscript>
+        
+        <script>
+         // Theme switcher
+        
+            let themeSwitcher = document.getElementById('themeSwitcher');
+        
+            const getPreferredTheme = () => {
+                if (localStorage.getItem('theme') != null) {
+                    return localStorage.getItem('theme');
+                }
+        
+                return document.documentElement.dataset.theme;
+            };
+        
+            const setTheme = function (theme) {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                } else {
+                    document.documentElement.dataset.theme = theme;
+                }
+        
+                localStorage.setItem('theme', theme);
+            };
+        
+            const showActiveTheme = theme => {
+                const activeBtn = document.querySelector(`[data-theme-value="${theme}"]`);
+        
+                document.querySelectorAll('[data-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                });
+        
+                activeBtn && activeBtn.classList.add('active');
+        
+             // Set button if demo mode is enabled
+                document.querySelectorAll('[data-theme-control="theme"]').forEach(element => {
+                    if (element.value == theme) {
+                        element.checked = true;
+                    }
+                });
+            };
+        
+            function reloadPage() {
+                window.location = window.location.pathname;
+            }
+        
+        
+            setTheme(getPreferredTheme());
+        
+            if(typeof themeSwitcher != 'undefined') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    if(localStorage.getItem('theme') != null) {
+                        if (localStorage.getItem('theme') == 'auto') {
+                            reloadPage();
+                        }
+                    }
+                });
+        
+                window.addEventListener('load', () => {
+                    showActiveTheme(getPreferredTheme());
+                    
+                    document.querySelectorAll('[data-theme-value]').forEach(element => {
+                        element.addEventListener('click', () => {
+                            const theme = element.getAttribute('data-theme-value');
+        
+                            localStorage.setItem('theme', theme);
+                            reloadPage();
+                        })
+                    })
+                });
+            }
+        </script>
+        <!-- Favicon -->
+        <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any">
+        
+            <!-- Demo script -->
+            <script>
+                var themeConfig = {
+                    theme: JSON.parse('"light"'),
+                    isRTL: JSON.parse('false'),
+                    isFluid: JSON.parse('true'),
+                    sidebarBehaviour: JSON.parse('"fixed"'),
+                    navigationColor: JSON.parse('"inverted"')
+                };
+                
+                var isRTL = localStorage.getItem('isRTL') === 'true',
+                    isFluid = localStorage.getItem('isFluid') === 'true',
+                    theme = localStorage.getItem('theme'),
+                    sidebarSizing = localStorage.getItem('sidebarSizing'),
+                    linkLTR = document.getElementById('stylesheetLTR'),
+                    linkRTL = document.getElementById('stylesheetRTL'),
+                    html = document.documentElement;
+        
+                if (isRTL) {
+                    linkLTR.setAttribute('disabled', '');
+                    linkRTL.removeAttribute('disabled');
+                    html.setAttribute('dir', 'rtl');
+                } else {
+                    linkRTL.setAttribute('disabled', '');
+                    linkLTR.removeAttribute('disabled');
+                    html.removeAttribute('dir');
+                }
+            </script>
+        
+        <!-- Page Title -->
+        <title>로그인 | Dashly</title>
+    </head>
+
+    <body class="d-flex align-items-center bg-light-green">
+
+            <!-- THEME CONFIGURATION -->
+            <script>
+                let themeAttrs = document.documentElement.dataset;
+            
+                for(let attr in themeAttrs) {
+                    if(localStorage.getItem(attr) != null) {
+                        document.documentElement.dataset[attr] = localStorage.getItem(attr);
+            
+                        if (theme === 'auto') {
+                            document.documentElement.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            
+                            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                                e.matches ? document.documentElement.dataset.theme = 'dark' : document.documentElement.dataset.theme = 'light';
+                            });
+                        }
+                    }
+                }
+            </script>
+        <!-- MAIN CONTENT -->
+        <main class="container">
+            <div class="row align-items-center justify-content-center vh-100">
+                <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 py-6">
+
+                    <!-- Title -->
+                    <h1 class="mb-2 text-center">
+                        Login
+                    </h1>
+
+                    <!-- Form -->
+                    <form class='mt-6'>
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="mb-4">
+    
+                                    <!-- Input -->
+                                    <input type="email" id='userId' class="form-control" placeholder="ID">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <!-- Password -->
+                                <div class="mb-4">
+    
+                                    <!-- Input -->
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id='password' class="form-control" autocomplete="off" data-toggle-password-input placeholder="Password">
+                                        
+                                        <button type="button" class="input-group-text px-4 text-secondary link-primary" data-toggle-password></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- / .row -->
+
+                        <div class="row align-items-center text-center">
+                            <div class="col-12">
+
+                                <!-- Button -->
+                                <button type="button" id='loginBtn' class="btn w-100 btn-primary mt-6 mb-2">login</button>
+
+                            </div>
+                        </div> <!-- / .row -->
+                    </form>
+                </div>
+            </div> <!-- / .row -->
+        </main> <!-- / main -->
+
+        <!-- 아이디 공란 모달 -->
+        <div
+        class="modal fade"
+        id="idBlankModal"
+        tabindex="-1"
+        aria-labelledby="idBlankModalLabel"
+        aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content w-400px mx-auto">
+                    <div class="modal-body text-center display-6 py-6">
+                        아이디를 입력해주세요.
+                    </div>
+                    <div class="modal-footer p-3 pt-0">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss='modal'>확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // 아이디 공란 모달-->
+
+        <!-- 비밀번호 공란 모달 -->
+        <div
+        class="modal fade"
+        id="passwordBlankModal"
+        tabindex="-1"
+        aria-labelledby="passwordBlankModalLabel"
+        aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content w-400px mx-auto">
+                    <div class="modal-body text-center display-6 py-6">
+                        비밀번호를 입력해주세요.
+                    </div>
+                    <div class="modal-footer p-3 pt-0">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss='modal'>확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // 비밀번호 공란 모달-->
+
+        <!-- 아이디 오류 모달 -->
+        <div
+        class="modal fade"
+        id="idErrorModal"
+        tabindex="-1"
+        aria-labelledby="idErrorModalLabel"
+        aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content w-400px mx-auto">
+                    <div class="modal-body text-center display-6 py-6">
+                        아이디 정보가 일치하지 않습니다.
+                    </div>
+                    <div class="modal-footer p-3 pt-0">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss='modal'>확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // 아이디 오류 모달-->
+
+        <!-- 비밀번호 오류 모달 -->
+        <div
+        class="modal fade"
+        id="passwordErrorModal"
+        tabindex="-1"
+        aria-labelledby="passwordErrorModalLabel"
+        aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content w-400px mx-auto">
+                    <div class="modal-body text-center display-6 py-6">
+                        비밀번호 정보가 일치하지 않습니다.
+                    </div>
+                    <div class="modal-footer p-3 pt-0">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss='modal'>확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // 비밀번호 오류 모달-->
+
+        <!-- JAVASCRIPT-->
+        <!-- Theme JS -->
+        <script src="./assets/js/theme.bundle.js"></script>        <script>
+            // 로그인 버튼 클릭 이벤트
+            document.getElementById("loginBtn").addEventListener("click", function () {
+            const userId = document.getElementById("userId").value;
+            const password = document.getElementById("password").value;
+
+            // 아이디와 비밀번호 테스트 데이터
+            const testUserId = "test";
+            const testPassword = "test";
+
+            // 모달 객체 생성
+            const idBlankModal = new Modal(document.getElementById("idBlankModal"));
+            const passwordBlankModal = new Modal(
+                document.getElementById("passwordBlankModal")
+            );
+            const idErrorModal = new Modal(document.getElementById("idErrorModal"));
+            const passwordErrorModal = new Modal(
+                document.getElementById("passwordErrorModal")
+            );
+
+            // 입력값 검증
+            if (!userId) {
+                idBlankModal.show(); // 아이디가 비어있으면 아이디 공란 모달 표시
+            } else if (!password) {
+                passwordBlankModal.show(); // 비밀번호가 비어있으면 비밀번호 공란 모달 표시
+            } else if (userId !== testUserId) {
+                idErrorModal.show(); // 아이디가 틀리면 아이디 오류 모달 표시
+            } else if (password !== testPassword) {
+                passwordErrorModal.show(); // 비밀번호가 틀리면 비밀번호 오류 모달 표시
+            } else {
+                location.href = "index.html"; // 아이디와 비밀번호가 일치하면 index.html로 이동
+            }
+            });
+        </script>
+    </body>
+</html>
