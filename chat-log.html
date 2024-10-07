@@ -1041,8 +1041,8 @@
                                             <li><a class="dropdown-item" href="#">대화 기록</a></li>
                                         </ul>
                                     </div>
-                                    <input type="text" class="form-control" placeholder='텍스트 입력'>
-                                    <button class="btn btn-dark h-50" id='searchButton' style='white-space: nowrap;'>조회</button>
+                                    <input type="text" class="form-control" id='searchQuery' placeholder='텍스트 입력'>
+                                    <button class="btn btn-dark h-50" id='searchButton' style='white-space: nowrap;' disabled>조회</button>
     
                                     <script>
                                         document.querySelectorAll('.dropdown-item').forEach(function(item) {
@@ -1219,10 +1219,10 @@
         <!-- JAVASCRIPT-->
         <!-- Theme JS -->
         <script src="./assets/js/theme.bundle.js"></script>        <script>
-            document.getElementById("searchButton").addEventListener("click", () => {
-                const table = document.getElementById("chatTable");
-                const noResultText = document.getElementById("noResultText");
+            const table = document.getElementById("chatTable");
+            const noResultText = document.getElementById("noResultText");
 
+            document.getElementById("searchButton").addEventListener("click", () => {
                 table.classList.add("d-none");
                 noResultText.classList.remove("d-none");
             })
@@ -1250,6 +1250,18 @@
                 // 전체 선택/해제 시에도 엑셀 다운로드 버튼 활성화/비활성화
                 const isChecked = Array.from(rowCheckboxes).some((cb) => cb.checked);
                 downloadButton.disabled = !isChecked;
+            });
+        </script>
+        <script>
+            const searchQuery = document.getElementById("searchQuery");
+            const searchButton = document.getElementById("searchButton");
+
+            searchQuery.addEventListener("input", (e) => {
+                if (e.target.value.length > 0) {
+                    searchButton.disabled = false;
+                } else {
+                    searchButton.disabled = true;
+                }
             });
         </script>
         
